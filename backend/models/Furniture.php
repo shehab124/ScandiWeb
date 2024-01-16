@@ -20,12 +20,10 @@ class Furniture extends Product
         return $this->_height;
     }
 
-
     public function setHeight($newHeight)
     {
         $this->_height = $newHeight;
     }
-
 
     public function getWidth()
     {
@@ -45,5 +43,43 @@ class Furniture extends Product
     public function setLength($newLength)
     {
         $this->_length = $newLength;
+    }
+
+    public function addProduct()
+    {
+        $db = new Database();
+
+        $conn = $db->getConnection();
+
+        $query = "INSERT INTO products (sku, price, type, height, width, length) VALUES (?, ?, ?, ?, ?, ?)";
+
+        $sku = parent::getSku();
+        $price = parent::getPrice();
+        $type = parent::getType();
+        $height = $this->getHeight();
+        $width = $this->getWidth();
+        $length = $this->getLength();
+
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param(
+            'sdsddd',
+            $sku,
+            $price,
+            $type,
+            $height,
+            $width,
+            $length
+        );
+
+        $result = $stmt->execute();
+
+        if ($result) {
+            echo "Product inserted successfully!";
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+
+        $stmt->close();
+        $conn->close();
     }
 }

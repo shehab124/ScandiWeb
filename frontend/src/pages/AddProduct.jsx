@@ -37,6 +37,8 @@ export default function AddProduct() {
         try {
             // create product will throw error if product type doesn't exist
             const product = productFactory.createProduct(data.sku, data.price, data.productType, data.additionalParams);
+
+            console.log("Additional Params" + JSON.stringify(data.additionalParams))
             console.log(product) // TODO SEND THIS PRODUCT
             // TODO isLoading
             // TODO check errors first and all data exists

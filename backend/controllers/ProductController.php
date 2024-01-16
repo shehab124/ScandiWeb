@@ -8,15 +8,27 @@ class ProductController
 
     public function __construct()
     {
-        $this->productModel = new ProductModel();
     }
 
     public function displayProducts()
     {
-        $products = $this->productModel->getProducts();
+        $products = Product::getProducts();
 
         header('Content-Type: application/json');
 
         echo json_encode($products);
+    }
+
+    public function addProduct($product)
+    {
+        $factory = new ProductFactory();
+
+        $newProduct = $factory->createProduct($product->sku, $product->price, $product->type, $product->additionalParams);
+        $newProduct->addProduct();
+    }
+
+    public function deleteProducts(array $products)
+    {
+        Product::deleteProductsBySku($products);
     }
 }
