@@ -4,9 +4,9 @@ class Book extends Product
 {
     private $_weight;
 
-    public function __construct($sku, $price, $type, $weight)
+    public function __construct($sku, $price, $productType, $weight)
     {
-        parent::__construct($sku, $price, $type);
+        parent::__construct($sku, $price, $productType);
         $this->_weight = $weight;
     }
 
@@ -26,20 +26,20 @@ class Book extends Product
 
         $conn = $db->getConnection();
 
-        $query = "INSERT INTO products (sku, price, type, weight) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO products (sku, price, productType, weight) VALUES (?, ?, ?, ?)";
 
         $stmt = $conn->prepare($query);
 
         $sku = parent::getSku();
         $price = parent::getPrice();
-        $type = parent::getType();
+        $productType = parent::getType();
         $weight = $this->getWeight();
 
         $stmt->bind_param(
             'sdsd', // TODO: TYPES string, double
             $sku,
             $price,
-            $type,
+            $productType,
             $weight
         );
 

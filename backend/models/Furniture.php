@@ -7,9 +7,9 @@ class Furniture extends Product
     private $_width;
     private $_length;
 
-    public function __construct($sku, $price, $type, $height, $width, $length)
+    public function __construct($sku, $price, $productType, $height, $width, $length)
     {
-        parent::__construct($sku, $price, $type);
+        parent::__construct($sku, $price, $productType);
         $this->_height = $height;
         $this->_width = $width;
         $this->_length = $length;
@@ -51,11 +51,11 @@ class Furniture extends Product
 
         $conn = $db->getConnection();
 
-        $query = "INSERT INTO products (sku, price, type, height, width, length) VALUES (?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO products (sku, price, productType, height, width, length) VALUES (?, ?, ?, ?, ?, ?)";
 
         $sku = parent::getSku();
         $price = parent::getPrice();
-        $type = parent::getType();
+        $productType = parent::getType();
         $height = $this->getHeight();
         $width = $this->getWidth();
         $length = $this->getLength();
@@ -65,7 +65,7 @@ class Furniture extends Product
             'sdsddd',
             $sku,
             $price,
-            $type,
+            $productType,
             $height,
             $width,
             $length

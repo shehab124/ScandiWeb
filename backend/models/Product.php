@@ -6,13 +6,13 @@ abstract class Product
 {
     private $_sku;
     private $_price;
-    private $_type;
+    private $_productType;
 
-    public function __construct($sku, $price, $type)
+    public function __construct($sku, $price, $productType)
     {
         $this->_sku = $sku;
         $this->_price = $price;
-        $this->_type = $type;
+        $this->_productType = $productType;
     }
 
     public function getSku()
@@ -37,12 +37,12 @@ abstract class Product
 
     public function getType()
     {
-        return $this->_type;
+        return $this->_productType;
     }
 
     public function setType($type)
     {
-        $this->_type = $type;
+        $this->_productType = $type;
     }
 
     public static function getProducts()
@@ -72,8 +72,6 @@ abstract class Product
 
         return $filteredProducts;
     }
-
-    abstract public function addProduct();
 
     public static function deleteProductsBySku(array $skuArray)
     {
@@ -107,4 +105,35 @@ abstract class Product
         $stmt->close();
         $conn->close();
     }
+
+    // returns true if sku exists
+    public static function skuExist($sku)
+    {
+        $db = new Database();
+
+        $conn = $db->getConnection();
+
+        $sanitizedSku = $conn->real_escape_string($sku);
+
+        $query = "SELECT COUNT(*) as count FROM products WHERE sku = ?";
+
+        $stmt = $conn->prepare($query);
+
+        $stmt->bind_param('s', $sanitizedSku);
+
+        $stmt->execute();
+
+        $count = 0;
+
+        $stmt->bind_result($count);
+
+        $stmt->fetch();
+
+        $stmt->close();
+        $conn->close();
+
+        return $count > 0;
+    }
+
+    abstract public function addProduct();
 }

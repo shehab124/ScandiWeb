@@ -6,13 +6,21 @@ $requestPath = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
 
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
+$pathSegments = explode('/', trim($requestPath, '/'));
 
-switch ($requestPath) {
-    case '/products':
+
+switch ($pathSegments[0]) {
+    case 'products':
         $productController = new ProductController();
 
         if ($requestMethod === 'GET') {
-            $productController->displayProducts();
+
+            $sku = isset($pathSegments[1]) ? $pathSegments[1] : null;
+
+            if ($sku) {
+                $productController->checkSku($sku);
+            } else
+                $productController->displayProducts();
         } elseif ($requestMethod === 'POST') {
             $requestData = json_decode(file_get_contents('php://input'), false);
             $productController->addProduct($requestData);

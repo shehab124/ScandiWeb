@@ -4,8 +4,6 @@ require_once "Autoloader.php";
 
 class ProductController
 {
-    private $productModel;
-
     public function __construct()
     {
     }
@@ -30,5 +28,11 @@ class ProductController
     public function deleteProducts(array $products)
     {
         Product::deleteProductsBySku($products);
+    }
+
+    public function checkSku($sku)
+    {
+        header('Content-Type: application/json');
+        echo json_encode(Product::skuExist($sku));
     }
 }
