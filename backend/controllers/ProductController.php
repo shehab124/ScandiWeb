@@ -10,29 +10,46 @@ class ProductController
 
     public function displayProducts()
     {
-        $products = Product::getProducts();
+        $response = Product::getProducts();
 
         header('Content-Type: application/json');
-
-        echo json_encode($products);
+        http_response_code($response['http_code']);
+        echo json_encode($response['data']);
     }
 
     public function addProduct($product)
     {
         $factory = new ProductFactory();
 
-        $newProduct = $factory->createProduct($product->sku, $product->price, $product->type, $product->additionalParams);
-        $newProduct->addProduct();
+        $newProduct = $factory->createProduct(
+            $product->sku,
+            $product->price,
+            $product->productType,
+            $product->additionalParams
+        );
+        $responseData = $newProduct->addProduct();
+
+        header('Content-Type: application/json');
+        http_response_code($responseData['http_code']);
+        echo json_encode($responseData);
     }
 
     public function deleteProducts(array $products)
     {
-        Product::deleteProductsBySku($products);
+        $responseData = Product::deleteProductsBySku($products);
+
+        header('Content-Type: application/json');
+        http_response_code($responseData['http_code']);
+        echo json_encode($responseData);
     }
 
     public function checkSku($sku)
     {
         header('Content-Type: application/json');
-        echo json_encode(Product::skuExist($sku));
+
+        $response = Product::skuExist($sku);
+        http_response_code($response['http_code']);
+
+        echo json_encode($response['data']);
     }
 }

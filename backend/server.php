@@ -2,6 +2,19 @@
 
 require_once "Autoloader.php";
 
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: GET, POST, DELETE");
+    header("Access-Control-Allow-Headers: Content-Type");
+    header("HTTP/1.1 200 OK");
+    exit;
+}
+
+// Regular CORS headers for other requests
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, DELETE");
+header("Access-Control-Allow-Headers: Content-Type");
+
 $requestPath = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
 
 $requestMethod = $_SERVER['REQUEST_METHOD'];

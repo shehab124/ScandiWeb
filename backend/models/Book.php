@@ -43,15 +43,35 @@ class Book extends Product
             $weight
         );
 
-        $result = $stmt->execute();
+        $responseData = [];
 
-        if ($result) {
-            echo "Product inserted successfully!";
-        } else {
-            echo "Error: " . $stmt->error;
+        try {
+            $result = $stmt->execute();
+            if ($result) {
+                $responseData = [
+                    'status' => 'success',
+                    'body' => 'Resource added successfully',
+                    'http_code' => 200
+                ];
+            }
+        } catch (mysqli_sql_exception) {
+            $responseData = [
+                'status' => 'failed',
+                'body' => "Duplicate SKU",
+                'http_code' => 405
+            ];
+        } catch (Exception) {
+            //http_response_code(405);
+            $responseData = [
+                'status' => 'failed',
+                'body' => "ERROR",
+                'http_code' => 404
+            ];
         }
 
         $stmt->close();
         $conn->close();
+
+        return $responseData;
     }
 }

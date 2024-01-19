@@ -30,22 +30,37 @@ export default function AddProduct() {
     const showFurnitureField = selectProductType === 'Furniture';
     const showDVDField = selectProductType === 'DVD';
 
-    const onSubmit = (data) => {
-        console.log("Form submitted", data);
+    const onSubmit = async (data) => {
         const productFactory = new ProductFactory();
 
         try {
             // create product will throw error if product type doesn't exist
             const product = productFactory.createProduct(data.sku, data.price, data.productType, data.additionalParams);
 
-            console.log("Additional Params" + JSON.stringify(data.additionalParams))
-            console.log(product) // TODO SEND THIS PRODUCT
+            console.log("MY PRODUCT" + JSON.stringify(data));
+
+            const response = await fetch('http://localhost/ScandiWeb/backend/server.php/products', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            const json = await response.json();
+
+            console.log(json)
+
+            if (response.ok) {
+                console.log("Product CREATED!")
+            }
+
             // TODO isLoading
             // TODO check errors first and all data exists
         }
-        catch
-        {
+        catch (error) {
             // TODO show error message if product type is not set
+            console.log(error.message);
         }
     }
 

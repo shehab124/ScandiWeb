@@ -48,29 +48,41 @@ abstract class Product
     public static function getProducts()
     {
         $db = new Database();
-
         $conn = $db->getConnection();
 
-        $query = "SELECT * FROM products";
+        $response = [];
 
-        $result = $conn->query($query);
+        try {
+            $query = "SELECT * FROM products";
 
-        if (!$result) {
-            return json_encode([]);
+            $result = $conn->query($query);
+
+            if ($result === false) {
+                throw new Exception("Error executing the query");
+            }
+
+            $products = $result->fetch_all(MYSQLI_ASSOC);
+
+            $result->free_result();
+
+            // Filter out null values from each product in the array
+            $response['data'] = array_map(function ($product) {
+                return array_filter($product, function ($value) {
+                    return $value !== null;
+                });
+            }, $products);
+
+            $response['http_code'] = 200;
+
+            return $response;
+        } catch (Exception) {
+            return [
+                'error' => 'Failed to retrieve products.',
+                'http_code' => 500
+            ];
+        } finally {
+            $conn->close();
         }
-
-        $products = $result->fetch_all(MYSQLI_ASSOC);
-
-        $result->free_result();
-
-        // Filter out null values from each product in the array
-        $filteredProducts = array_map(function ($product) {
-            return array_filter($product, function ($value) {
-                return $value !== null;
-            });
-        }, $products);
-
-        return $filteredProducts;
     }
 
     public static function deleteProductsBySku(array $skuArray)
@@ -83,56 +95,84 @@ abstract class Product
             return $conn->real_escape_string($sku);
         }, $skuArray);
 
-        // Prepare the DELETE query with an IN clause
         $placeholders = implode(',', array_fill(0, count($sanitizedSkus), '?'));
         $query = "DELETE FROM products WHERE sku IN ($placeholders)";
 
-        // Create a prepared statement
         $stmt = $conn->prepare($query);
 
         // Bind parameters
         $types = str_repeat('s', count($sanitizedSkus));
         $stmt->bind_param($types, ...$sanitizedSkus);
 
-        $result = $stmt->execute();
+        $responseData = [];
 
-        if ($result) {
-            echo "Products deleted successfully!";
-        } else {
-            echo "Error: " . $stmt->error;
+        try {
+            $result = $stmt->execute();
+
+            if ($result && $stmt->affected_rows > 0) {
+                $responseData = [
+                    'status' => 'success',
+                    'body' => 'Resources deleted successfully',
+                    'http_code' => 200
+                ];
+            } else
+                throw new mysqli_sql_exception($stmt->error, $stmt->errno);
+        } catch (mysqli_sql_exception $e) {
+            $responseData = [
+                'status' => 'Failed',
+                'body' => 'Failed deleting products',
+                'http_code' => 404
+            ];
+        } finally {
+            $stmt->close();
+            $conn->close();
         }
 
-        $stmt->close();
-        $conn->close();
+        return $responseData;
     }
 
     // returns true if sku exists
     public static function skuExist($sku)
     {
         $db = new Database();
-
         $conn = $db->getConnection();
 
-        $sanitizedSku = $conn->real_escape_string($sku);
+        $response = [];
 
-        $query = "SELECT COUNT(*) as count FROM products WHERE sku = ?";
+        try {
+            $sanitizedSku = $conn->real_escape_string($sku);
 
-        $stmt = $conn->prepare($query);
+            $query = "SELECT COUNT(*) as count FROM products WHERE sku = ?";
 
-        $stmt->bind_param('s', $sanitizedSku);
+            $stmt = $conn->prepare($query);
 
-        $stmt->execute();
+            if ($stmt === false) {
+                throw new Exception("Error preparing the statement: " . $conn->error);
+            }
 
-        $count = 0;
+            $stmt->bind_param('s', $sanitizedSku);
 
-        $stmt->bind_result($count);
+            $stmt->execute();
 
-        $stmt->fetch();
+            $count = 0;
 
-        $stmt->close();
-        $conn->close();
+            $stmt->bind_result($count);
 
-        return $count > 0;
+            $stmt->fetch();
+
+            $response['data'] = $count > 0;
+            $response['http_code'] = 200;
+
+            return $response;
+        } catch (Exception) {
+            return [
+                'error' => 'Error checking SKU existence',
+                'http_code' => 500
+            ];
+        } finally {
+            $stmt->close();
+            $conn->close();
+        }
     }
 
     abstract public function addProduct();
