@@ -18,12 +18,21 @@ input[type=number] {
   color: #333;
 }
 
+.body
+{
+  padding-bottom: 6.74rem;
+}
+
 .App
 {
-  position: relative;
+  position:relative;
   max-width: 1200px;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Navbar*/
@@ -60,12 +69,14 @@ input[type=number] {
 
 /* Footer */
 .footer {
+  position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   align-items: center;
   margin-top: 20px;
   padding-top: 20px;
+  padding-bottom: 1rem;
   border-top: 3px solid #3e3939;
   text-align: center;
 }

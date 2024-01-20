@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { get, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import Navbar from "../components/NavbarAdd";
-import ProductFactory from "../classes/ProductFactory";
 
 export default function AddProduct() {
 

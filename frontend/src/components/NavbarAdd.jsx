@@ -6,7 +6,6 @@ const Navbar = ({ submitHandler, selectProductType }) => {
 
     const handleCancel = () => navigate('/');
 
-
     return (
         <nav>
             <div className="navbar">
