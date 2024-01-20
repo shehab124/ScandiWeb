@@ -5,6 +5,7 @@ import ProductFactory from "../classes/ProductFactory";
 
 export default function AddProduct() {
 
+    const [IsLoading, setIsLoading] = useState(false);
     const form = useForm({
         defaultValues: {
             sku: "",
@@ -20,7 +21,7 @@ export default function AddProduct() {
             }
         }
     });
-    const [IsLoading, setIsLoading] = useState(false);
+
     const { register, handleSubmit, formState, trigger, watch } = form;
     const { errors, isSubmitSuccessful } = formState;
 
@@ -31,14 +32,10 @@ export default function AddProduct() {
     const showDVDField = selectProductType === 'DVD';
 
     const onSubmit = async (data) => {
-        const productFactory = new ProductFactory();
 
+        console.log(data)
+        setIsLoading(true);
         try {
-            // create product will throw error if product type doesn't exist
-            const product = productFactory.createProduct(data.sku, data.price, data.productType, data.additionalParams);
-
-            console.log("MY PRODUCT" + JSON.stringify(data));
-
             const response = await fetch('http://localhost/ScandiWeb/backend/server.php/products', {
                 method: 'POST',
                 body: JSON.stringify(data),
@@ -62,14 +59,13 @@ export default function AddProduct() {
             // TODO show error message if product type is not set
             console.log(error.message);
         }
+        finally {
+            setIsLoading(false);
+        }
     }
 
     const handleNavbarSubmit = () => {
         handleSubmit(onSubmit)();
-    }
-
-    const handleValidation = () => {
-        console.log("hellllllllllllllllllll")
     }
 
     return (

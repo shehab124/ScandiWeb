@@ -23,6 +23,7 @@ class ProductController
 
         $newProduct = $factory->createProduct(
             $product->sku,
+            $product->name,
             $product->price,
             $product->productType,
             $product->additionalParams

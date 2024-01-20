@@ -4,9 +4,9 @@ class Book extends Product
 {
     private $_weight;
 
-    public function __construct($sku, $price, $productType, $weight)
+    public function __construct($sku, $name, $price, $productType, $weight)
     {
-        parent::__construct($sku, $price, $productType);
+        parent::__construct($sku, $name, $price, $productType);
         $this->_weight = $weight;
     }
 
@@ -26,18 +26,20 @@ class Book extends Product
 
         $conn = $db->getConnection();
 
-        $query = "INSERT INTO products (sku, price, productType, weight) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO products (sku, name, price, productType, weight) VALUES (?, ?, ?, ?, ?)";
 
         $stmt = $conn->prepare($query);
 
         $sku = parent::getSku();
+        $name = parent::getName();
         $price = parent::getPrice();
         $productType = parent::getType();
         $weight = $this->getWeight();
 
         $stmt->bind_param(
-            'sdsd', // TODO: TYPES string, double
+            'ssdsd',
             $sku,
+            $name,
             $price,
             $productType,
             $weight
@@ -61,17 +63,15 @@ class Book extends Product
                 'http_code' => 405
             ];
         } catch (Exception) {
-            //http_response_code(405);
             $responseData = [
                 'status' => 'failed',
                 'body' => "ERROR",
                 'http_code' => 404
             ];
+        } finally {
+            $stmt->close();
+            $conn->close();
+            return $responseData;
         }
-
-        $stmt->close();
-        $conn->close();
-
-        return $responseData;
     }
 }

@@ -5,12 +5,14 @@ require_once "Autoloader.php";
 abstract class Product
 {
     private $_sku;
+    private $_name;
     private $_price;
     private $_productType;
 
-    public function __construct($sku, $price, $productType)
+    public function __construct($sku, $name, $price, $productType)
     {
         $this->_sku = $sku;
+        $this->_name = $name;
         $this->_price = $price;
         $this->_productType = $productType;
     }
@@ -23,6 +25,16 @@ abstract class Product
     public function setSku($sku)
     {
         $this->_sku = $sku;
+    }
+
+    public function getName()
+    {
+        return $this->_name;
+    }
+
+    public function setName($name)
+    {
+        $this->_name = $name;
     }
 
     public function getPrice()

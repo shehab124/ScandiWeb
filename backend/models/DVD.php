@@ -5,9 +5,9 @@ class DVD extends Product
 {
     private $_size;
 
-    public function __construct($sku, $price, $productType, $size)
+    public function __construct($sku, $name, $price, $productType, $size)
     {
-        parent::__construct($sku, $price, $productType);
+        parent::__construct($sku, $name, $price, $productType);
         $this->_size = $size;
     }
 
@@ -27,18 +27,20 @@ class DVD extends Product
 
         $conn = $db->getConnection();
 
-        $query = "INSERT INTO products (sku, price, productType, size) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO products (sku, name, price, productType, size) VALUES (?, ?, ?, ?, ?)";
 
         $stmt = $conn->prepare($query);
 
         $sku = parent::getSku();
+        $name = parent::getName();
         $price = parent::getPrice();
         $productType = parent::getType();
         $size = $this->getSize();
 
         $stmt->bind_param(
-            'sdsd', // TODO: TYPES string, double
+            'ssdsd', // TODO: TYPES string, double
             $sku,
+            $name,
             $price,
             $productType,
             $size
@@ -68,11 +70,11 @@ class DVD extends Product
                 'body' => "ERROR",
                 'http_code' => 404
             ];
+        } finally {
+            $stmt->close();
+            $conn->close();
+
+            return $responseData;
         }
-
-        $stmt->close();
-        $conn->close();
-
-        return $responseData;
     }
 }
