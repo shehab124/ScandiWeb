@@ -2,9 +2,13 @@ import Product from "./Product";
 
 export default class DVD extends Product {
 
-    constructor(sku, price, type, size) {
-        super(sku, price, type);
+    constructor(sku, name, price, type, size) {
+        super(sku, name, price, type);
         this._size = size; // Using underscore convention for private property
+    }
+
+    printAttributes() {
+        return "Size: " + this.size + " MB";
     }
 
     // Getter for size

@@ -2,11 +2,15 @@ import Product from "./Product";
 
 export default class Furniture extends Product {
 
-    constructor(sku, price, type, height, width, length) {
-        super(sku, price, type);
+    constructor(sku, name, price, type, height, width, length) {
+        super(sku, name, price, type);
         this._height = height;
         this._width = width;
         this._length = length;
+    }
+
+    printAttributes() {
+        return "Dimensions: " + this._length + "x" + this._width + "x" + this._height;
     }
 
     // Getter for height

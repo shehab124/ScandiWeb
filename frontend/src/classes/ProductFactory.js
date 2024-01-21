@@ -3,28 +3,29 @@ import Book from "./Book";
 import Furniture from "./Furniture";
 
 export default class ProductFactory {
-    createProduct(sku, price, type, additionalParams) {
-        switch (type) {
+    createProduct(product) {
+        console.log(product)
+        switch (product.productType) {
             case 'Furniture':
-                return this.createFurniture(sku, price, type, additionalParams);
+                return this.createFurniture(product.sku, product.name, product.price, product.productType, product.height, product.width, product.length);
             case 'DVD':
-                return this.createDVD(sku, price, type, additionalParams);
+                return this.createDVD(product.sku, product.name, product.price, product.productType, product.size);
             case 'Book':
-                return this.createBook(sku, price, type, additionalParams);
+                return this.createBook(product.sku, product.name, product.price, product.productType, product.weight);
             default:
                 throw new Error('Invalid product type');
         }
     }
 
-    createFurniture(sku, price, type, { height, width, length }) {
-        return new Furniture(sku, price, type, height, width, length);
+    createFurniture(sku, name, price, productType, height, width, length) {
+        return new Furniture(sku, name, price, productType, height, width, length);
     }
 
-    createDVD(sku, price, type, { size }) {
-        return new DVD(sku, price, type, size);
+    createDVD(sku, name, price, productType, size) {
+        return new DVD(sku, name, price, productType, size);
     }
 
-    createBook(sku, price, type, { weight }) {
-        return new Book(sku, price, type, weight);
+    createBook(sku, name, price, productType, weight) {
+        return new Book(sku, name, price, productType, weight);
     }
 }

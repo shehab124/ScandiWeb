@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react"
 import Navbar from "../components/NavbarHome"
 import useFetch from "../hooks/useFetch"
+import ProductFactory from "../classes/ProductFactory";
 
 export default function Products() {
 
     const { data: products, setData: setProducts, isLoading, error } = useFetch('http://localhost/ScandiWeb/backend/server.php/products');
+
+    let productFactory = new ProductFactory();
+
+    console.log(products[0])
 
     const [selectedSkus, setSelectedSkus] = useState([]);
 
@@ -45,33 +50,34 @@ export default function Products() {
         }
     }
 
-    useEffect(() => {
-        console.log(products)
-        console.log("Selected Skus:", selectedSkus);
-    }, [selectedSkus, setSelectedSkus]);
-
 
     return (
         <>
             <Navbar deleteHandler={handleDelete} />
             <div className="products">
                 {
-                    products.map((product) =>
-                        <div key={product.sku} className="card">
-                            <div className="checkbox">
-                                <input
-                                    type="checkbox"
-                                    onChange={() => handleCheckboxChange(product.sku)} />
+                    products.map((product) => {
+                        product = productFactory.createProduct(product);
+                        return (
+                            < div key={product.sku} className="card" >
+                                <div className="checkbox">
+                                    <input
+                                        type="checkbox"
+                                        onChange={() => handleCheckboxChange(product.sku)} />
+                                </div>
+                                <div className="attributes">
+                                    <h2>{product.sku}</h2>
+                                    <h4>{product.name}</h4>
+                                    <h4>{product.price}</h4>
+                                    <h4>{product.printAttributes()}</h4>
+                                </div>
                             </div>
-                            <div className="attributes">
-                                <h2>{product.name}</h2>
-                                <h4>{product.sku}</h4>
-                            </div>
-                        </div>
+                        )
+                    }
                     )
 
                 }
-            </div>
+            </div >
         </>
     )
 }

@@ -1,6 +1,7 @@
 export default class Product {
-    constructor(sku, price, type) {
+    constructor(sku, name, price, type) {
         this._sku = sku;
+        this._name = name;
         this._price = price;
         this._type = type;
     }
@@ -33,5 +34,13 @@ export default class Product {
     // Setter for type
     set type(newType) {
         this._type = newType;
+    }
+
+    get name() {
+        return this._name;
+    }
+
+    set name(name) {
+        this._name = name;
     }
 }

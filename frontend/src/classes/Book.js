@@ -2,9 +2,13 @@ import Product from "./Product";
 
 export default class Book extends Product {
 
-    constructor(sku, price, type, weight) {
-        super(sku, price, type);
+    constructor(sku, name, price, type, weight) {
+        super(sku, name, price, type);
         this._weight = weight;
+    }
+
+    printAttributes() {
+        return "Weight: " + this.weight + " KG";
     }
 
     // Getter for weight
