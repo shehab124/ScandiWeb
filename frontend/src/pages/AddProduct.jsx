@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from 'react-hook-form';
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/NavbarAdd";
 
 export default function AddProduct() {
+
+    const navigate = new useNavigate();
 
     const [IsLoading, setIsLoading] = useState(false);
     const form = useForm({
@@ -32,7 +35,6 @@ export default function AddProduct() {
 
     const onSubmit = async (data) => {
 
-        console.log(data)
         setIsLoading(true);
         try {
             const response = await fetch('http://localhost/ScandiWeb/backend/server.php/products', {
@@ -48,7 +50,7 @@ export default function AddProduct() {
             console.log(json)
 
             if (response.ok) {
-                console.log("Product CREATED!")
+                navigate('/');
             }
 
             // TODO isLoading
@@ -70,77 +72,85 @@ export default function AddProduct() {
     return (
         <>
             <Navbar submitHandler={handleNavbarSubmit} selectProductType={selectProductType} />
-            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <form onSubmit={handleSubmit(onSubmit)} validate>
 
-                <div>
-                    <label htmlFor="sku">SKU</label>
-                    <br />
-                    <input
-                        type="text"
-                        id="sku"
-                        {...register("sku", {
-                            required: "SKU is required.",
-                        })}
-                        onBlur={() => trigger("sku")}
-                    />
-                    <p className="error">{errors.sku?.message}</p>
-                </div>
+                <label className="labels" htmlFor="sku">SKU</label>
+                <input
+                    className="inputs"
+                    type="text"
+                    id="sku"
+                    {...register("sku", {
+                        required: "SKU is required.",
+                        validate: {
+                            skuExist: async (fieldValue) => {
+                                const response = await fetch(`http://localhost/ScandiWeb/backend/server.php/products/${fieldValue}`)
+                                const data = await response.json()
+                                console.log(data);
+                                return !data || "SKU already exists";
+                            }
+                        }
 
-                <br />
-
-                <div>
-                    <label htmlFor="name">Name</label>
-                    <br />
-                    <input
-                        type="text"
-                        id="name"
-                        {...register("name", {
-                            required: "Name is required."
-                        })}
-                        onBlur={() => trigger("name")}
-                    />
-                    <p className="error">{errors.name?.message}</p>
-                </div>
+                    })}
+                    onBlur={() => trigger("sku")}
+                />
+                {errors.sku?.message &&
+                    <p className="error">{errors.sku?.message}</p>}
 
 
-                <br />
-
-                <div>
-                    <label htmlFor="price">Price</label>
-                    <br />
-                    <input
-                        type="number"
-                        id="price"
-                        {...register("price", {
-                            valueAsNumber: true,
-                            required: "Price is required."
-                        })}
-                        onBlur={() => trigger("price")}
-                    />
-                    <p className="error">{errors.price?.message}</p>
-                </div>
-
-                <br />
-
-                <div>
-                    <label htmlFor="productType">Type Switcher</label>
-                    <br />
-                    <select name="productType" id="productType" {...register("productType")}>
-                        <option value="">Select a product type</option>
-                        <option value="DVD">DVD</option>
-                        <option value="Book">Book</option>
-                        <option value="Furniture">Furniture</option>
-                    </select>
-                </div>
+                <label className="labels" htmlFor="name">Name</label>
+                <input
+                    className="inputs"
+                    type="text"
+                    id="name"
+                    {...register("name", {
+                        required: "Name is required."
+                    })}
+                    onBlur={() => trigger("name")}
+                />
+                {errors.name?.message &&
+                    <p className="error">{errors.name?.message}</p>}
 
 
-                <br />
-                <br />
+                <label className="labels" htmlFor="price">Price($)</label>
+                <input
+                    className="inputs"
+                    type="number"
+                    id="price"
+                    {...register("price", {
+                        valueAsNumber: true,
+                        required: "Price is required."
+                    })}
+                    onBlur={() => trigger("price")}
+                />
+                {errors.price?.message &&
+                    <p className="error">{errors.price?.message}</p>}
+
+
+
+                <label className="labels" htmlFor="productType">Type Switcher</label>
+                <select
+                    name="productType"
+                    id="productType"
+                    className="inputs"
+                    {...register("productType", {
+                        required: "Type is required"
+                    })}
+                    onBlur={() => trigger("productType")}
+                >
+                    <option className="inputs" value="">Select a product type</option>
+                    <option className="inputs" value="DVD">DVD</option>
+                    <option className="inputs" value="Book">Book</option>
+                    <option className="inputs" value="Furniture">Furniture</option>
+                </select>
+                {errors.productType?.message &&
+                    <p className="error">{errors.productType?.message}</p>}
+
 
                 {showDVDField &&
-                    <div>
-                        <label htmlFor="size">Size (MB)</label>
+                    <div className="dvd">
+                        <label className="labels" htmlFor="size">Size (MB)</label>
                         <input
+                            className="inputs"
                             type="number"
                             id="size"
                             {...register("additionalParams.size", {
@@ -153,9 +163,10 @@ export default function AddProduct() {
                 }
 
                 {showFurnitureField &&
-                    <div>
-                        <label htmlFor="height">Height (CM)</label>
+                    <div className="furniture">
+                        <label className="labels" htmlFor="height">Height (CM)</label>
                         <input
+                            className="inputs"
                             type="number"
                             id="height"
                             {...register("additionalParams.height", {
@@ -163,10 +174,12 @@ export default function AddProduct() {
                             })}
                             onBlur={() => trigger("additionalParams.height")}
                         />
-                        <p className="error">{errors?.additionalParams?.height?.message}</p>
+                        {errors?.additionalParams?.height?.message &&
+                            <p className="error">{errors?.additionalParams?.height?.message}</p>}
 
-                        <label htmlFor="width">Width (CM)</label>
+                        <label className="labels" htmlFor="width">Width (CM)</label>
                         <input
+                            className="inputs"
                             type="number"
                             id="width"
                             {...register("additionalParams.width", {
@@ -174,10 +187,12 @@ export default function AddProduct() {
                             })}
                             onBlur={() => trigger("additionalParams.width")}
                         />
-                        <p className="error">{errors?.additionalParams?.width?.message}</p>
+                        {errors?.additionalParams?.width?.message &&
+                            <p className="error">{errors?.additionalParams?.width?.message}</p>}
 
-                        <label htmlFor="length">Length (CM)</label>
+                        <label className="labels" htmlFor="length">Length (CM)</label>
                         <input
+                            className="inputs"
                             type="number"
                             id="length"
                             {...register("additionalParams.length", {
@@ -185,14 +200,16 @@ export default function AddProduct() {
                             })}
                             onBlur={() => trigger("additionalParams.length")}
                         />
-                        <p className="error">{errors?.additionalParams?.length?.message}</p>
+                        {errors?.additionalParams?.length?.message &&
+                            <p className="error">{errors?.additionalParams?.length?.message}</p>}
                     </div>
                 }
 
                 {showBookField &&
-                    <div>
-                        <label htmlFor="weight">Weight (KG)</label>
+                    <div className="book">
+                        <label className="labels" htmlFor="weight">Weight (KG)</label>
                         <input
+                            className="inputs"
                             type="number"
                             id="weight"
                             {...register("additionalParams.weight", {
@@ -200,7 +217,8 @@ export default function AddProduct() {
                             })}
                             onBlur={() => trigger("additionalParams.weight")}
                         />
-                        <p className="error">{errors.additionalParams?.weight?.message}</p>
+                        {errors.additionalParams?.weight?.message &&
+                            <p className="error">{errors.additionalParams?.weight?.message}</p>}
                     </div>}
             </form>
         </>

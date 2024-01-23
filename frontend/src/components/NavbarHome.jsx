@@ -1,16 +1,19 @@
 import { Link } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
 const Navbar = ({ deleteHandler }) => {
+
+    const navigate = new useNavigate();
+    const addHandler = () => {
+        navigate('/add-product')
+    }
+
     return (
         <nav>
             <div className="navbar">
                 <h1>Product List</h1>
                 <div className='links'>
-                    <Link to='/add-product'>ADD</Link>
-                    <button
-                        onClick={deleteHandler}
-                        style={{ color: 'white', backgroundColor: 'black', borderRadius: '8px' }}
-                    >MASS DELETE</button>
+                    <button onClick={addHandler} className='buttons'>ADD</button>
+                    <button onClick={deleteHandler} className='buttons'>MASS DELETE</button>
                 </div>
             </div>
         </nav>

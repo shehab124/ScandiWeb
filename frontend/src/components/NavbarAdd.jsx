@@ -11,9 +11,9 @@ const Navbar = ({ submitHandler, selectProductType }) => {
             <div className="navbar">
                 <h1>Product Add</h1>
                 <div className='links'>
-                    <button onClick={submitHandler} disabled={!selectProductType} style={{ color: 'white', backgroundColor: 'black', borderRadius: '8px' }}>Save</button>
+                    <button onClick={submitHandler} className='buttons'>Save</button>
                     <button
-                        style={{ color: 'white', backgroundColor: 'black', borderRadius: '8px' }}
+                        className='buttons'
                         onClick={handleCancel}
                     >
                         Cancel</button>
