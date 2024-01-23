@@ -28,8 +28,17 @@ class ProductController
             $product->productType,
             $product->additionalParams
         );
-        $responseData = $newProduct->addProduct();
+        $validation = $newProduct->validate();
 
+        if ($validation === true) {
+            $responseData = $newProduct->addProduct();
+        } else {
+            $responseData = [
+                'status' => 'failed',
+                'body' => $validation,
+                'http_code' => 404
+            ];
+        }
         header('Content-Type: application/json');
         http_response_code($responseData['http_code']);
         echo json_encode($responseData);

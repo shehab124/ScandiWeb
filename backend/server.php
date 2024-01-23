@@ -26,6 +26,7 @@ switch ($pathSegments[0]) {
     case 'products':
         $productController = new ProductController();
 
+        // Display or Check SKU
         if ($requestMethod === 'GET') {
 
             $sku = isset($pathSegments[1]) ? $pathSegments[1] : null;
@@ -34,10 +35,14 @@ switch ($pathSegments[0]) {
                 $productController->checkSku($sku);
             } else
                 $productController->displayProducts();
-        } elseif ($requestMethod === 'POST') {
+        }
+        // Add product 
+        elseif ($requestMethod === 'POST') {
             $requestData = json_decode(file_get_contents('php://input'), false);
             $productController->addProduct($requestData);
-        } else if ($requestMethod === 'DELETE') {
+        }
+        // Delete products 
+        else if ($requestMethod === 'DELETE') {
             $requestData = json_decode(file_get_contents('php://input'), false);
             $productController->deleteProducts($requestData);
         } else {

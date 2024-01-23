@@ -57,6 +57,7 @@ abstract class Product
         $this->_productType = $type;
     }
 
+    // returns all products from DB
     public static function getProducts()
     {
         $db = new Database();
@@ -97,6 +98,7 @@ abstract class Product
         }
     }
 
+    // receives an array of SKUs and delete them in the DB
     public static function deleteProductsBySku(array $skuArray)
     {
         $db = new Database();
@@ -187,5 +189,29 @@ abstract class Product
         }
     }
 
+    // Add a products to the DB
     abstract public function addProduct();
+
+    protected function validateMainParams()
+    {
+        $sku =         $this->getSku();
+        $name =        $this->getName();
+        $price =       $this->getPrice();
+        $productType = $this->getType();
+
+        $errors = [];
+
+        if ($sku == null || strlen($sku) < 2)
+            array_push($errors, "Invalid sku");
+        if ($name == null || strlen($name) < 2)
+            array_push($errors, "Invalid name");
+        if ($price == null || $price < 0)
+            array_push($errors, "Invalid price");
+        if ($productType == "")
+            array_push($errors, "Invalid product type");
+
+        return $errors;
+    }
+
+    abstract public function validate();
 }

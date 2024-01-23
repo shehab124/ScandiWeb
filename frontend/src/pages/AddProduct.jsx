@@ -7,7 +7,7 @@ export default function AddProduct() {
 
     const navigate = new useNavigate();
 
-    const [IsLoading, setIsLoading] = useState(false);
+    const [backendError, setBackendError] = useState([]);
     const form = useForm({
         defaultValues: {
             sku: "",
@@ -35,7 +35,6 @@ export default function AddProduct() {
 
     const onSubmit = async (data) => {
 
-        setIsLoading(true);
         try {
             const response = await fetch('http://localhost/ScandiWeb/backend/server.php/products', {
                 method: 'POST',
@@ -47,21 +46,13 @@ export default function AddProduct() {
 
             const json = await response.json();
 
-            console.log(json)
-
             if (response.ok) {
                 navigate('/');
             }
-
-            // TODO isLoading
-            // TODO check errors first and all data exists
         }
         catch (error) {
             // TODO show error message if product type is not set
             console.log(error.message);
-        }
-        finally {
-            setIsLoading(false);
         }
     }
 

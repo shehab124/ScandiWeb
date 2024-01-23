@@ -38,7 +38,7 @@ class DVD extends Product
         $size = $this->getSize();
 
         $stmt->bind_param(
-            'ssdsd', // TODO: TYPES string, double
+            'ssdsd',
             $sku,
             $name,
             $price,
@@ -64,7 +64,6 @@ class DVD extends Product
                 'http_code' => 405
             ];
         } catch (Exception) {
-            //http_response_code(405);
             $responseData = [
                 'status' => 'failed',
                 'body' => "ERROR",
@@ -76,5 +75,21 @@ class DVD extends Product
 
             return $responseData;
         }
+    }
+
+    public function validate()
+    {
+        $errors = [];
+        $errors = parent::validateMainParams();
+
+        $size = $this->getSize();
+
+        if ($size < 0)
+            array_push($errors, "Invalid size");
+
+        if (count($errors) == 0)
+            return true;
+        else
+            return $errors;
     }
 }

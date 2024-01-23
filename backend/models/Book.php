@@ -74,4 +74,20 @@ class Book extends Product
             return $responseData;
         }
     }
+
+    public function validate()
+    {
+        $errors = [];
+        $errors = parent::validateMainParams();
+
+        $weight = $this->getWeight();
+
+        if ($weight < 0)
+            array_push($errors, "Invalid weight");
+
+        if (count($errors) == 0)
+            return true;
+        else
+            return $errors;
+    }
 }

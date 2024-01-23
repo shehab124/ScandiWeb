@@ -103,4 +103,26 @@ class Furniture extends Product
             return $responseData;
         }
     }
+
+    public function validate()
+    {
+        $errors = [];
+        $errors = parent::validateMainParams();
+
+        $height = $this->getHeight();
+        $width  = $this->getWidth();
+        $length  = $this->getLength();
+
+        if ($height < 0)
+            array_push($errors, "Invalid weight");
+        if ($width < 0)
+            array_push($errors, "Invalid width");
+        if ($length < 0)
+            array_push($errors, "Invalid length");
+
+        if (count($errors) == 0)
+            return true;
+        else
+            return $errors;
+    }
 }
