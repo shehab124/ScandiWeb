@@ -82,7 +82,7 @@ class Book extends Product
 
         $weight = $this->getWeight();
 
-        if ($weight < 0)
+        if ($weight <= 0)
             array_push($errors, "Invalid weight");
 
         if (count($errors) == 0)

@@ -8,11 +8,29 @@ class ProductFactory
     {
         switch ($productType) {
             case 'Furniture':
-                return $this->createFurniture($sku, $name, $price, $productType, $additionalParams);
+                return $this->createFurniture(
+                    $sku,
+                    $name,
+                    $price,
+                    $productType,
+                    $additionalParams
+                );
             case 'DVD':
-                return $this->createDVD($sku, $name, $price, $productType, $additionalParams);
+                return $this->createDVD(
+                    $sku,
+                    $name,
+                    $price,
+                    $productType,
+                    $additionalParams
+                );
             case 'Book':
-                return $this->createBook($sku, $name, $price, $productType, $additionalParams);
+                return $this->createBook(
+                    $sku,
+                    $name,
+                    $price,
+                    $productType,
+                    $additionalParams
+                );
             default:
                 throw new Exception('Invalid product type');
         }
@@ -24,20 +42,40 @@ class ProductFactory
         $width = $additionalParams->width;
         $length = $additionalParams->length;
 
-        return new Furniture($sku, $name, $price, $productType, $height,  $width, $length);
+        return new Furniture(
+            $sku,
+            $name,
+            $price,
+            $productType,
+            $height,
+            $width,
+            $length
+        );
     }
 
     private function createDVD($sku, $name, $price, $productType, $additionalParams)
     {
         $size = $additionalParams->size;
 
-        return new DVD($sku, $name, $price, $productType, $size);
+        return new DVD(
+            $sku,
+            $name,
+            $price,
+            $productType,
+            $size
+        );
     }
 
     private function createBook($sku, $name, $price, $productType, $additionalParams)
     {
         $weight = $additionalParams->weight;
 
-        return new Book($sku, $name, $price, $productType, $weight);
+        return new Book(
+            $sku,
+            $name,
+            $price,
+            $productType,
+            $weight
+        );
     }
 }

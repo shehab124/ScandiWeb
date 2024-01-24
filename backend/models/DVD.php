@@ -84,7 +84,7 @@ class DVD extends Product
 
         $size = $this->getSize();
 
-        if ($size < 0)
+        if ($size <= 0)
             array_push($errors, "Invalid size");
 
         if (count($errors) == 0)

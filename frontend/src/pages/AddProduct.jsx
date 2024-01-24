@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useForm } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/NavbarAdd";
+import Validations from "../validations/Validations";
 
 export default function AddProduct() {
 
     const navigate = new useNavigate();
 
-    const [backendError, setBackendError] = useState([]);
     const form = useForm({
         defaultValues: {
             sku: "",
@@ -24,8 +24,9 @@ export default function AddProduct() {
         }
     });
 
+    const [backendErrors, setBackendErrors] = useState(null);
     const { register, handleSubmit, formState, trigger, watch } = form;
-    const { errors, isSubmitSuccessful } = formState;
+    const { errors } = formState;
 
     const selectProductType = watch('productType');
 
@@ -46,13 +47,16 @@ export default function AddProduct() {
 
             const json = await response.json();
 
+            console.log(json)
             if (response.ok) {
                 navigate('/');
             }
+            else {
+                setBackendErrors(json.body)
+            }
         }
         catch (error) {
-            // TODO show error message if product type is not set
-            console.log(error.message);
+            console.log(error);
         }
     }
 
@@ -63,69 +67,53 @@ export default function AddProduct() {
     return (
         <>
             <Navbar submitHandler={handleNavbarSubmit} selectProductType={selectProductType} />
-            <form onSubmit={handleSubmit(onSubmit)} validate>
+            <form onSubmit={handleSubmit(onSubmit)} noValidate>
 
+                {/*SKU*/}
                 <label className="labels" htmlFor="sku">SKU</label>
                 <input
                     className="inputs"
                     type="text"
                     id="sku"
-                    {...register("sku", {
-                        required: "SKU is required.",
-                        validate: {
-                            skuExist: async (fieldValue) => {
-                                const response = await fetch(`http://localhost/ScandiWeb/backend/server.php/products/${fieldValue}`)
-                                const data = await response.json()
-                                console.log(data);
-                                return !data || "SKU already exists";
-                            }
-                        }
-
-                    })}
+                    {...register("sku", Validations.skuValidation)}
                     onBlur={() => trigger("sku")}
                 />
                 {errors.sku?.message &&
                     <p className="error">{errors.sku?.message}</p>}
 
-
+                {/*Name*/}
                 <label className="labels" htmlFor="name">Name</label>
                 <input
                     className="inputs"
                     type="text"
                     id="name"
-                    {...register("name", {
-                        required: "Name is required."
-                    })}
+                    {...register("name", Validations.nameValidation)}
                     onBlur={() => trigger("name")}
                 />
                 {errors.name?.message &&
                     <p className="error">{errors.name?.message}</p>}
 
 
+                {/*Price*/}
                 <label className="labels" htmlFor="price">Price($)</label>
                 <input
                     className="inputs"
                     type="number"
                     id="price"
-                    {...register("price", {
-                        valueAsNumber: true,
-                        required: "Price is required."
-                    })}
+                    {...register("price", Validations.priceValidation)}
                     onBlur={() => trigger("price")}
                 />
                 {errors.price?.message &&
                     <p className="error">{errors.price?.message}</p>}
 
 
-
+                {/*Product Type*/}
                 <label className="labels" htmlFor="productType">Type Switcher</label>
                 <select
                     name="productType"
                     id="productType"
                     className="inputs"
-                    {...register("productType", {
-                        required: "Type is required"
-                    })}
+                    {...register("productType", Validations.productTypeValidation)}
                     onBlur={() => trigger("productType")}
                 >
                     <option className="inputs" value="">Select a product type</option>
@@ -136,7 +124,7 @@ export default function AddProduct() {
                 {errors.productType?.message &&
                     <p className="error">{errors.productType?.message}</p>}
 
-
+                {/*DVD*/}
                 {showDVDField &&
                     <div className="dvd">
                         <label className="labels" htmlFor="size">Size (MB)</label>
@@ -144,15 +132,15 @@ export default function AddProduct() {
                             className="inputs"
                             type="number"
                             id="size"
-                            {...register("additionalParams.size", {
-                                required: "Size is required"
-                            })}
+                            {...register("additionalParams.size",
+                                Validations.additionalParamsValidation.size)}
                             onBlur={() => trigger("additionalParams.size")}
                         />
                         {errors?.additionalParams?.size?.message && <p className="error">{errors?.additionalParams?.size?.message}</p>}
                     </div>
                 }
 
+                {/*Furniture*/}
                 {showFurnitureField &&
                     <div className="furniture">
                         <label className="labels" htmlFor="height">Height (CM)</label>
@@ -160,9 +148,8 @@ export default function AddProduct() {
                             className="inputs"
                             type="number"
                             id="height"
-                            {...register("additionalParams.height", {
-                                required: "Height is required"
-                            })}
+                            {...register("additionalParams.height",
+                                Validations.additionalParamsValidation.height)}
                             onBlur={() => trigger("additionalParams.height")}
                         />
                         {errors?.additionalParams?.height?.message &&
@@ -173,9 +160,8 @@ export default function AddProduct() {
                             className="inputs"
                             type="number"
                             id="width"
-                            {...register("additionalParams.width", {
-                                required: "Width is required"
-                            })}
+                            {...register("additionalParams.width",
+                                Validations.additionalParamsValidation.width)}
                             onBlur={() => trigger("additionalParams.width")}
                         />
                         {errors?.additionalParams?.width?.message &&
@@ -186,9 +172,8 @@ export default function AddProduct() {
                             className="inputs"
                             type="number"
                             id="length"
-                            {...register("additionalParams.length", {
-                                required: "Length is required"
-                            })}
+                            {...register("additionalParams.length",
+                                Validations.additionalParamsValidation.length)}
                             onBlur={() => trigger("additionalParams.length")}
                         />
                         {errors?.additionalParams?.length?.message &&
@@ -203,14 +188,20 @@ export default function AddProduct() {
                             className="inputs"
                             type="number"
                             id="weight"
-                            {...register("additionalParams.weight", {
-                                required: "Weight is required"
-                            })}
+                            {...register("additionalParams.weight",
+                                Validations.additionalParamsValidation.weight)}
                             onBlur={() => trigger("additionalParams.weight")}
                         />
                         {errors.additionalParams?.weight?.message &&
                             <p className="error">{errors.additionalParams?.weight?.message}</p>}
                     </div>}
+                {backendErrors &&
+                    <p className="error">
+                        {backendErrors.map((backendError) => {
+                            return (<>Server error: {backendError}<br /></>)
+                        })}
+                    </p>
+                }
             </form>
         </>
     )

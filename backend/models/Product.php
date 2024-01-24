@@ -205,7 +205,7 @@ abstract class Product
             array_push($errors, "Invalid sku");
         if ($name == null || strlen($name) < 2)
             array_push($errors, "Invalid name");
-        if ($price == null || $price < 0)
+        if ($price == null || $price <= 0)
             array_push($errors, "Invalid price");
         if ($productType == "")
             array_push($errors, "Invalid product type");

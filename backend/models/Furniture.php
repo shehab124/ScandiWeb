@@ -113,11 +113,11 @@ class Furniture extends Product
         $width  = $this->getWidth();
         $length  = $this->getLength();
 
-        if ($height < 0)
+        if ($height <= 0)
             array_push($errors, "Invalid weight");
-        if ($width < 0)
+        if ($width <= 0)
             array_push($errors, "Invalid width");
-        if ($length < 0)
+        if ($length <= 0)
             array_push($errors, "Invalid length");
 
         if (count($errors) == 0)
