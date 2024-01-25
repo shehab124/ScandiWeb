@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/NavbarAdd";
 import Validations from "../validations/Validations";
+import ProductFactory from "../classes/ProductFactory";
 
 export default function AddProduct() {
 
@@ -14,13 +15,11 @@ export default function AddProduct() {
             name: "",
             price: "",
             productType: "",
-            additionalParams: {
-                size: "",
-                height: "",
-                width: "",
-                length: "",
-                weight: ""
-            }
+            size: "",
+            height: "",
+            width: "",
+            length: "",
+            weight: ""
         }
     });
 
@@ -37,9 +36,13 @@ export default function AddProduct() {
     const onSubmit = async (data) => {
 
         try {
+            let factory = new ProductFactory();
+            let product = factory.createProduct(data);
+            console.log(product)
+            console.log("PRODUCT" + JSON.stringify(product))
             const response = await fetch('http://localhost/ScandiWeb/backend/server.php/products', {
                 method: 'POST',
-                body: JSON.stringify(data),
+                body: JSON.stringify(product),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -67,7 +70,7 @@ export default function AddProduct() {
     return (
         <>
             <Navbar submitHandler={handleNavbarSubmit} selectProductType={selectProductType} />
-            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <form onSubmit={handleSubmit(onSubmit)} id="product_form" noValidate>
 
                 {/*SKU*/}
                 <label className="labels" htmlFor="sku">SKU</label>
@@ -127,73 +130,76 @@ export default function AddProduct() {
                 {/*DVD*/}
                 {showDVDField &&
                     <div className="dvd">
+                        <h3 className="desc">Please, provide size</h3>
                         <label className="labels" htmlFor="size">Size (MB)</label>
                         <input
                             className="inputs"
                             type="number"
                             id="size"
-                            {...register("additionalParams.size",
+                            {...register("size",
                                 Validations.additionalParamsValidation.size)}
-                            onBlur={() => trigger("additionalParams.size")}
+                            onBlur={() => trigger(".size")}
                         />
-                        {errors?.additionalParams?.size?.message && <p className="error">{errors?.additionalParams?.size?.message}</p>}
+                        {errors?.size?.message && <p className="error">{errors?.size?.message}</p>}
                     </div>
                 }
 
                 {/*Furniture*/}
                 {showFurnitureField &&
                     <div className="furniture">
+                        <h3 className="desc">Please, provide dimensions</h3>
                         <label className="labels" htmlFor="height">Height (CM)</label>
                         <input
                             className="inputs"
                             type="number"
                             id="height"
-                            {...register("additionalParams.height",
+                            {...register("height",
                                 Validations.additionalParamsValidation.height)}
-                            onBlur={() => trigger("additionalParams.height")}
+                            onBlur={() => trigger("height")}
                         />
-                        {errors?.additionalParams?.height?.message &&
-                            <p className="error">{errors?.additionalParams?.height?.message}</p>}
+                        {errors?.height?.message &&
+                            <p className="error">{errors?.height?.message}</p>}
 
                         <label className="labels" htmlFor="width">Width (CM)</label>
                         <input
                             className="inputs"
                             type="number"
                             id="width"
-                            {...register("additionalParams.width",
+                            {...register("width",
                                 Validations.additionalParamsValidation.width)}
-                            onBlur={() => trigger("additionalParams.width")}
+                            onBlur={() => trigger("width")}
                         />
-                        {errors?.additionalParams?.width?.message &&
-                            <p className="error">{errors?.additionalParams?.width?.message}</p>}
+                        {errors?.width?.message &&
+                            <p className="error">{errors?.width?.message}</p>}
 
                         <label className="labels" htmlFor="length">Length (CM)</label>
                         <input
                             className="inputs"
                             type="number"
                             id="length"
-                            {...register("additionalParams.length",
+                            {...register("length",
                                 Validations.additionalParamsValidation.length)}
-                            onBlur={() => trigger("additionalParams.length")}
+                            onBlur={() => trigger("length")}
                         />
-                        {errors?.additionalParams?.length?.message &&
-                            <p className="error">{errors?.additionalParams?.length?.message}</p>}
+                        {errors?.length?.message &&
+                            <p className="error">{errors?.length?.message}</p>}
                     </div>
                 }
 
                 {showBookField &&
                     <div className="book">
+                        <h3 className="desc">Please, provide weight</h3>
                         <label className="labels" htmlFor="weight">Weight (KG)</label>
                         <input
                             className="inputs"
                             type="number"
                             id="weight"
-                            {...register("additionalParams.weight",
+                            {...register("weight",
                                 Validations.additionalParamsValidation.weight)}
-                            onBlur={() => trigger("additionalParams.weight")}
+                            onBlur={() => trigger("weight")}
                         />
-                        {errors.additionalParams?.weight?.message &&
-                            <p className="error">{errors.additionalParams?.weight?.message}</p>}
+                        {errors?.weight?.message &&
+                            <p className="error">{errors?.weight?.message}</p>}
                     </div>}
                 {backendErrors &&
                     <p className="error">

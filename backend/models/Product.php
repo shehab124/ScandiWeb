@@ -78,11 +78,11 @@ abstract class Product
 
             $result->free_result();
 
-            // Filter out null values from each product in the array
             $response['data'] = array_map(function ($product) {
-                return array_filter($product, function ($value) {
-                    return $value !== null;
-                });
+                $factory = new ProductFactory();
+                $p = $factory->createProduct((object)$product);
+                $arrayProduct = $factory->convertProductToArray($p);
+                return $arrayProduct;
             }, $products);
 
             $response['http_code'] = 200;
@@ -97,6 +97,7 @@ abstract class Product
             $conn->close();
         }
     }
+
 
     // receives an array of SKUs and delete them in the DB
     public static function deleteProductsBySku(array $skuArray)

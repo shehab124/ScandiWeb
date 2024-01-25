@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 const useFetch = (url) => {
-    const [data, setData] = useState([]);
+    const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -17,7 +17,7 @@ const useFetch = (url) => {
             })
             .then(data => {
                 console.log("From useFetch")
-                setData(data);
+                setProducts(data);
                 setIsLoading(false);
                 setError(null);
             })
@@ -34,7 +34,7 @@ const useFetch = (url) => {
 
     }, [url]);
 
-    return { data, setData, isLoading, error };
+    return { products, setProducts, isLoading, error };
 }
 
 export default useFetch

@@ -5,8 +5,8 @@ import ProductFactory from "../classes/ProductFactory";
 
 export default function Products() {
 
-    const { data: products,
-        setData: setProducts,
+    const { products,
+        setProducts,
         isLoading,
         error
     } = useFetch('http://localhost/ScandiWeb/backend/server.php/products');
@@ -63,7 +63,7 @@ export default function Products() {
                             < div key={product.sku} className="card" >
                                 <div className="checkbox-container">
                                     <input
-                                        className="checkbox"
+                                        className="delete-checkbox"
                                         type="checkbox"
                                         onChange={() => handleCheckboxChange(product.sku)}
                                     />

@@ -21,13 +21,7 @@ class ProductController
     {
         $factory = new ProductFactory();
 
-        $newProduct = $factory->createProduct(
-            $product->sku,
-            $product->name,
-            $product->price,
-            $product->productType,
-            $product->additionalParams
-        );
+        $newProduct = $factory->createProduct($product);
         $validation = $newProduct->validate();
 
         if ($validation === true) {

@@ -13,7 +13,7 @@ const Navbar = ({ deleteHandler }) => {
                 <h1>Product List</h1>
                 <div className='links'>
                     <button onClick={addHandler} className='buttons'>ADD</button>
-                    <button onClick={deleteHandler} className='buttons'>MASS DELETE</button>
+                    <button onClick={deleteHandler} className='buttons' id="delete-product-btn">MASS DELETE</button>
                 </div>
             </div>
         </nav>

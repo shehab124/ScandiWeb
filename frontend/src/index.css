@@ -177,7 +177,7 @@ input[type=number] {
   z-index: 2;
 }
 
-.checkbox
+.delete-checkbox
 {
   -webkit-appearance: none;
   height:16px;
@@ -299,4 +299,12 @@ form.div, .labels, .inputs, .furniture, .dvd, .book
   display: flex;
   flex-direction: column;
   gap: 7px;
+}
+
+.desc
+{
+  margin: 10px;
+  background-color: var(--card-color);
+  text-decoration: underline;
+  padding: 3px;
 }
