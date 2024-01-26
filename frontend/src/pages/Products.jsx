@@ -5,11 +5,8 @@ import ProductFactory from "../classes/ProductFactory";
 
 export default function Products() {
 
-    const { products,
-        setProducts,
-        isLoading,
-        error
-    } = useFetch('https://chehabgamal.shop/backend/server.php/products');
+    const { products, setProducts }
+        = useFetch('https://chehabgamal.shop/backend/server.php/products');
 
     const [selectedSkus, setSelectedSkus] = useState([]);
 
@@ -34,9 +31,6 @@ export default function Products() {
                     'Content-Type': 'application/json'
                 }
             })
-
-            const json = await response.json();
-
 
             if (response.ok) {
 

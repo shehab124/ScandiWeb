@@ -1,5 +1,4 @@
 import React from 'react'
-import Navbar from '../components/NavbarHome'
 import { Link } from 'react-router-dom'
 
 export default function NotFound() {
