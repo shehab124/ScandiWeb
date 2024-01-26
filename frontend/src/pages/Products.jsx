@@ -37,7 +37,6 @@ export default function Products() {
 
             const json = await response.json();
 
-            console.log(json);
 
             if (response.ok) {
 
@@ -70,7 +69,7 @@ export default function Products() {
                                 </div>
                                 <div className="attributes">
                                     <h2>{product.sku}</h2>
-                                    <h4>{product.name}</h4>
+                                    <h2>{product.name}</h2>
                                     <h4>{product.price}$</h4>
                                     <h4>{product.printAttributes()}</h4>
                                 </div>

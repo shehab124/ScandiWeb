@@ -122,9 +122,9 @@ input[type=number] {
   margin-top: 20px;
   padding-top: 20px;
   padding-bottom: 1rem;
-  border-top: 3px solid #3e3939;
-  border-top-right-radius: 15px;
   border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-top: 3px solid #3e3939;
   text-align: center;
   background-color: var(--navbar-color);
   color: white;
