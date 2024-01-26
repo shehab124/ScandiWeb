@@ -9,7 +9,7 @@ export default function Products() {
         setProducts,
         isLoading,
         error
-    } = useFetch('http://localhost/ScandiWeb/backend/server.php/products');
+    } = useFetch('https://chehabgamal.shop/backend/server.php/products');
 
     const [selectedSkus, setSelectedSkus] = useState([]);
 
@@ -27,7 +27,7 @@ export default function Products() {
 
     const handleDelete = async () => {
         try {
-            const response = await fetch('http://localhost/ScandiWeb/backend/server.php/products', {
+            const response = await fetch('https://chehabgamal.shop/backend/server.php/products', {
                 method: 'DELETE',
                 body: JSON.stringify(selectedSkus),
                 headers: {
