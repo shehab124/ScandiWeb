@@ -189,14 +189,14 @@ input[type=number] {
   color: white;
   border-radius: 3px;
 }
-.checkbox:checked {
+.delete-checkbox:checked {
   background-color: rgb(155, 0, 0);
 }
-.checkbox:before {
+.delete-checkbox:before {
   content: "";
 }
 
-.checkbox::after {
+.delete-checkbox::after {
   content: "✖";
 }
 
