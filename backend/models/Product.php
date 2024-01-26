@@ -105,7 +105,7 @@ abstract class Product
         $db = new Database();
         $conn = $db->getConnection();
 
-        // Sanitize the SKU values (assuming they are strings)
+        // Sanitize the SKU values
         $sanitizedSkus = array_map(function ($sku) use ($conn) {
             return $conn->real_escape_string($sku);
         }, $skuArray);
