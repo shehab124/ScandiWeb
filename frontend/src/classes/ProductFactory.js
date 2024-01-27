@@ -4,7 +4,6 @@ import Furniture from "./Furniture";
 
 export default class ProductFactory {
     createProduct(product) {
-        console.log(product)
         switch (product.productType) {
             case 'Furniture':
                 return this.createFurniture(product.sku, product.name, product.price, product.productType, product.height, product.width, product.length);

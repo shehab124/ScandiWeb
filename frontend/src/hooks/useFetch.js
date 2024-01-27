@@ -16,7 +16,6 @@ const useFetch = (url) => {
                 return response.json();
             })
             .then(data => {
-                console.log("From useFetch")
                 setProducts(data);
                 setIsLoading(false);
                 setError(null);
