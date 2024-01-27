@@ -66,7 +66,7 @@ abstract class Product
         $response = [];
 
         try {
-            $query = "SELECT * FROM products";
+            $query = "SELECT * FROM products ORDER BY sku";
 
             $result = $conn->query($query);
 
