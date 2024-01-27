@@ -8,7 +8,7 @@ class Validations {
         },
         validate: {
             skuExist: async (fieldValue) => {
-                const response = await fetch(`http://localhost/ScandiWeb/backend/server.php/products/${fieldValue}`)
+                const response = await fetch(`https://chehabgamal.shop/backend/server.php/products/${fieldValue}`)
                 const data = await response.json()
                 return !data || "SKU already exists";
             }

@@ -40,7 +40,7 @@ export default function AddProduct() {
             let product = factory.createProduct(data);
             console.log(product)
             console.log("PRODUCT" + JSON.stringify(product))
-            const response = await fetch('http://localhost/ScandiWeb/backend/server.php/products', {
+            const response = await fetch('https://chehabgamal.shop/backend/server.php/products', {
                 method: 'POST',
                 body: JSON.stringify(product),
                 headers: {

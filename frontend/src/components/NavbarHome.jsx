@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 const Navbar = ({ deleteHandler }) => {
 
@@ -13,7 +12,11 @@ const Navbar = ({ deleteHandler }) => {
                 <h1>Product List</h1>
                 <div className='links'>
                     <button onClick={addHandler} className='buttons'>ADD</button>
-                    <button onClick={deleteHandler} className='buttons' id="delete-product-btn">MASS DELETE</button>
+                    <button
+                        onClick={deleteHandler}
+                        className='buttons'
+                        id="delete-product-btn"
+                        value="MASS DELETE">MASS DELETE</button>
                 </div>
             </div>
         </nav>
